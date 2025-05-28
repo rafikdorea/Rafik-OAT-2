@@ -1,72 +1,75 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Cadastro Academia</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="container mt-5">
-    <h2 class="text-center mb-4">Cadastro de Aluno - Academia</h2>
-    <form id="formCadastro" class="row g-3">
-      <div class="col-md-6">
-        <label class="form-label">Nome Completo</label>
-        <input type="text" id="nome" class="form-control" required placeholder="Digite seu nome">
+  <header class="header-gym">
+    <div class="overlay">
+      <h1>Bem-vindo à Academia Coliseum</h1>
+      <p>Cadastre-se e comece sua jornada fitness!</p>
+    </div>
+  </header>
+
+  <main class="container mt-4">
+    <form id="formAcademia" class="p-4 bg-white rounded shadow-sm">
+      <h2 class="mb-4 text-center">Cadastro de Aluno</h2>
+
+      <div class="mb-3">
+        <label for="nome" class="form-label">Nome Completo *</label>
+        <input type="text" id="nome" class="form-control" required />
       </div>
-      <div class="col-md-3">
-        <label class="form-label">Idade</label>
-        <input type="number" id="idade" class="form-control" required placeholder="Ex: 25">
+
+      <div class="mb-3">
+        <label for="idade" class="form-label">Idade *</label>
+        <input type="number" id="idade" class="form-control" min="10" max="120" required />
       </div>
-      <div class="col-md-3">
-        <label class="form-label">Peso (kg)</label>
-        <input type="number" id="peso" class="form-control" required placeholder="Ex: 75">
+
+      <div class="mb-3">
+        <label for="peso" class="form-label">Peso (kg) *</label>
+        <input type="number" id="peso" class="form-control" step="0.1" min="20" max="300" required />
       </div>
-      <div class="col-md-6">
-        <label class="form-label">Plano</label>
-        <select id="plano" class="form-select" required>
-          <option value="">Escolha o plano</option>
-          <option value="Black">Black - R$150</option>
-          <option value="Comum">Comum - R$120</option>
+
+      <div class="mb-3">
+        <label for="restricoes" class="form-label">Possui restrições? *</label>
+        <select id="restricoes" class="form-select" required>
+          <option value="">Selecione</option>
+          <option value="Não">Não</option>
+          <option value="Sim">Sim</option>
         </select>
       </div>
-      <div class="col-md-6">
-        <label class="form-label">Restrições Físicas / Observações</label>
-        <input type="text" id="restricoes" class="form-control" placeholder="Ex: problema no joelho">
+
+      <div class="mb-3" id="descricaoRestricoesContainer" style="display:none;">
+        <label for="descricaoRestricoes" class="form-label">Descreva as restrições *</label>
+        <textarea id="descricaoRestricoes" class="form-control"></textarea>
       </div>
-      <div class="col-md-6">
-        <label class="form-label">Telefone</label>
-        <input type="text" id="telefone" class="form-control" placeholder="(99) 99999-9999">
+
+      <div class="mb-3">
+        <label class="form-label">Plano *</label>
+        <div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="plano" id="planoBlack" value="Black (R$150)" required />
+            <label class="form-check-label" for="planoBlack">Black - R$150</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="plano" id="planoComum" value="Comum (R$120)" />
+            <label class="form-check-label" for="planoComum">Comum - R$120</label>
+          </div>
+        </div>
       </div>
-      <div class="col-md-6">
-        <label class="form-label">Email</label>
-        <input type="email" id="email" class="form-control" placeholder="exemplo@email.com">
-      </div>
-      <div class="col-12 text-center">
-        <button type="submit" class="btn btn-primary px-5 mt-3">Cadastrar</button>
-      </div>
+
+      <button type="submit" class="btn btn-primary w-100">Cadastrar</button>
     </form>
 
-    <div class="mt-5">
-      <h4 class="mb-3">Alunos Cadastrados</h4>
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>Nome</th>
-            <th>Idade</th>
-            <th>Peso</th>
-            <th>Plano</th>
-            <th>Restrições</th>
-            <th>Telefone</th>
-            <th>Email</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody id="tabelaUsuarios"></tbody>
-      </table>
-    </div>
-  </div>
+    <section class="mt-5">
+      <h3>Alunos Cadastrados</h3>
+      <ul id="listaAlunos" class="list-group"></ul>
+    </section>
+  </main>
 
   <script src="script.js"></script>
 </body>

@@ -1,0 +1,36 @@
+body {
+  background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+  color: white;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.container {
+  background-color: #ffffff10;
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 0 10px #00000060;
+}
+.form-label {
+  font-weight: 600;
+}
+.form-control, .form-select {
+  background-color: #ffffff10;
+  color: white;
+  border: 1px solid #ffffff30;
+}
+.form-control::placeholder {
+  color: #ffffff90;
+}
+.table {
+  color: white;
+}
+.table thead {
+  background-color: #00000020;
+}
+.btn-primary {
+  background-color: #1abc9c;
+  border: none;
+}
+.btn-danger {
+  background-color: #e74c3c;
+  border: none;
+}

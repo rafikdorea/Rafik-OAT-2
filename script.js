@@ -1,60 +1,91 @@
-const form = document.getElementById('formCadastro');
-const tabela = document.getElementById('tabelaUsuarios');
+// Verifica se o DOM carregou
+document.addEventListener("DOMContentLoaded", function () {
+  const form = document.getElementById("formAcademia");
+  const listaAlunos = document.getElementById("listaAlunos");
+  const restricoes = document.getElementById("restricoes");
+  const descricaoRestricoesContainer = document.getElementById("descricaoRestricoesContainer");
+  const descricaoRestricoes = document.getElementById("descricaoRestricoes");
 
-function getUsuarios() {
-  return JSON.parse(localStorage.getItem('alunosAcademia')) || [];
-}
+  // Exibe campo extra se houver restrições
+  if (restricoes) {
+    restricoes.addEventListener("change", function () {
+      if (this.value === "Sim") {
+        descricaoRestricoesContainer.style.display = "block";
+        descricaoRestricoes.required = true;
+      } else {
+        descricaoRestricoesContainer.style.display = "none";
+        descricaoRestricoes.value = "";
+        descricaoRestricoes.required = false;
+      }
+    });
+  }
 
-function salvarUsuarios(usuarios) {
-  localStorage.setItem('alunosAcademia', JSON.stringify(usuarios));
-}
+  // Carrega alunos salvos
+  function carregarAlunos() {
+    const alunos = JSON.parse(localStorage.getItem("alunosAcademia")) || [];
+    listaAlunos.innerHTML = "";
 
-function adicionarUsuario(dados) {
-  const usuarios = getUsuarios();
-  usuarios.push(dados);
-  salvarUsuarios(usuarios);
-  listarUsuarios();
-}
+    if (alunos.length === 0) {
+      listaAlunos.innerHTML = "<li class='list-group-item'>Nenhum aluno cadastrado ainda.</li>";
+      return;
+    }
 
-function excluirUsuario(index) {
-  const usuarios = getUsuarios();
-  usuarios.splice(index, 1);
-  salvarUsuarios(usuarios);
-  listarUsuarios();
-}
+    alunos.forEach((aluno, index) => {
+      const li = document.createElement("li");
+      li.classList.add("list-group-item");
+      li.innerHTML = `
+        <strong>${aluno.nome}</strong> - ${aluno.idade} anos, ${aluno.peso}kg<br>
+        Plano: ${aluno.plano} <br>
+        Restrições: ${aluno.restricoes}${aluno.descricaoRestricoes ? ` (${aluno.descricaoRestricoes})` : ""}
+        <button class="btn btn-sm btn-danger float-end" onclick="removerAluno(${index})">Remover</button>
+      `;
+      listaAlunos.appendChild(li);
+    });
+  }
 
-function listarUsuarios() {
-  const usuarios = getUsuarios();
-  tabela.innerHTML = '';
-  usuarios.forEach((u, i) => {
-    const row = `
-      <tr>
-        <td>${u.nome}</td>
-        <td>${u.idade}</td>
-        <td>${u.peso}kg</td>
-        <td>${u.plano}</td>
-        <td>${u.restricoes}</td>
-        <td>${u.telefone}</td>
-        <td>${u.email}</td>
-        <td><button class="btn btn-danger btn-sm" onclick="excluirUsuario(${i})">Excluir</button></td>
-      </tr>`;
-    tabela.innerHTML += row;
-  });
-}
+  // Salva novo aluno
+  if (form) {
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
 
-form.addEventListener('submit', function(e) {
-  e.preventDefault();
-  const dados = {
-    nome: document.getElementById('nome').value,
-    idade: document.getElementById('idade').value,
-    peso: document.getElementById('peso').value,
-    plano: document.getElementById('plano').value,
-    restricoes: document.getElementById('restricoes').value,
-    telefone: document.getElementById('telefone').value,
-    email: document.getElementById('email').value
+      const nome = document.getElementById("nome").value.trim();
+      const idade = document.getElementById("idade").value.trim();
+      const peso = document.getElementById("peso").value.trim();
+      const plano = document.querySelector("input[name='plano']:checked")?.value;
+      const restricao = restricoes.value;
+      const descRestricao = descricaoRestricoes.value.trim();
+
+      if (restricao === "Sim" && descRestricao === "") {
+        alert("Por favor, descreva as restrições.");
+        return;
+      }
+
+      const novoAluno = {
+        nome,
+        idade,
+        peso,
+        plano,
+        restricoes: restricao,
+        descricaoRestricoes: restricao === "Sim" ? descRestricao : ""
+      };
+
+      const alunos = JSON.parse(localStorage.getItem("alunosAcademia")) || [];
+      alunos.push(novoAluno);
+      localStorage.setItem("alunosAcademia", JSON.stringify(alunos));
+
+      form.reset();
+      descricaoRestricoesContainer.style.display = "none";
+      carregarAlunos();
+    });
+  }
+
+  // Função global para remover aluno
+  window.removerAluno = function (index) {
+    const alunos = JSON.parse(localStorage.getItem("alunosAcademia")) || [];
+    alunos.splice(index, 1);
+    localStorage.setItem("alunosAcademia", JSON.stringify(alunos));
+    carregarAlunos();
   };
-  adicionarUsuario(dados);
-  form.reset();
-});
 
-listarUsuarios();
+  carregarAlunos();
+});
